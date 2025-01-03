@@ -5,18 +5,15 @@ Class {
 	#package : 'Myg-Chess-Core'
 }
 
-{ #category : 'as yet unclassified' }
-MyBlackPawn >> captureDirectionForPawn: aPawn [
-    "Retourne les directions spécifiques aux pions noirs"
-    ^ { aPawn square + (-1 @ -1). "Diagonale bas-gauche" .
-        aPawn square + (1 @ -1). "Diagonale bas-droite" }
-
-
-]
-
 { #category : 'accessing' }
 MyBlackPawn >> firstForwardSquare [
     ^ self square down.
+]
+
+{ #category : 'as yet unclassified' }
+MyBlackPawn >> leftCaptureSquare [
+    "Retourne la case de capture en diagonale bas-gauche"
+    ^ self square + (-1 @ -1).
 ]
 
 { #category : 'accessing' }
@@ -28,4 +25,10 @@ MyBlackPawn >> nextForwardSquare: aSquare [
 MyBlackPawn >> renderPieceOn: aSquare [
 
 	^ aSquare renderBlackPawn
+]
+
+{ #category : 'as yet unclassified' }
+MyBlackPawn >> rightCaptureSquare [
+    "Retourne la case de capture en diagonale bas-droite"
+    ^ self square + (1 @ -1).
 ]

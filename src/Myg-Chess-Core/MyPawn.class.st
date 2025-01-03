@@ -9,22 +9,21 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-MyPawn >> captureDirectionForPawn: aPawn [
-    self subclassResponsibility.
-
-]
-
-{ #category : 'as yet unclassified' }
 MyPawn >> captureMovesFor: aPawn [
     | captureMoves |
     
-    "Obtenir les directions de capture pour chaque sous-classe"
-    captureMoves := self captureDirectionForPawn: aPawn.
-    
-    "Filtrer les directions valides"
-    captureMoves := captureMoves select: [ :s | 
+    "Obtenir les cases de capture possibles"
+    captureMoves := {
+        self leftCaptureSquare.
+        self rightCaptureSquare.
+    }.
+
+    "Filtrer les directions valides pour les captures"
+    captureMoves := captureMoves select: [ :s |
         s notNil and: [
-            (s hasPiece) and: [ (s contents color ~= aPawn color) ] "Vérifier si une pièce peut être capturée"
+            s hasPiece and: [ 
+                s contents color ~= aPawn color "Filtrage des ennemis"
+            ]
         ]
     ].
     
@@ -85,6 +84,14 @@ MyPawn >> initialize [
 	hasMoved := false
 ]
 
+{ #category : 'as yet unclassified' }
+MyPawn >> leftCaptureSquare [
+    "Définir cette méthode dans les sous-classes"
+    self subclassResponsibility.
+
+
+]
+
 { #category : 'path commands' }
 MyPawn >> moveTo: aSquare [
 	super moveTo: aSquare.
@@ -104,17 +111,22 @@ MyPawn >> renderPieceOn: aSquare [
 	^ self subclassResponsibility
 ]
 
+{ #category : 'as yet unclassified' }
+MyPawn >> rightCaptureSquare [
+    "Définir cette méthode dans les sous-classes"
+    self subclassResponsibility.
+]
+
 { #category : 'rendering' }
-MyPawn >> targetSquaresLegal: aBoolean [ 
-    | forwardMoves captureMoves |
+MyPawn >> targetSquaresLegal: aBoolean [
 
-    "Get forward moves"
-    forwardMoves := self forwardMovesFor: self.
-    
-    "Get capture moves"
-    captureMoves := self captureMovesFor: self.
-    
-    "Combine both types of moves"
-    ^ captureMoves, forwardMoves
+	| forwardMoves captureMoves |
+	"Get forward moves"
+	forwardMoves := self forwardMovesFor: self.
 
+	"Get capture moves"
+	captureMoves := self captureMovesFor: self.
+
+	"Combine both types of moves"
+	^ captureMoves , forwardMoves
 ]
