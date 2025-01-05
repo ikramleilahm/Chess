@@ -41,7 +41,7 @@ MyPawn >> enPassantTargetSquares [
         (lastMove piece isPawn
             and: ([ (lastMove startSquare file asInteger - lastMove endSquare file asInteger) abs = 2 ]))
 					ifTrue: [
-						self isInTheGoodLineForEnPassant 
+						self isInEnPassantLine 
 						ifTrue: [  
                 enemySquare := lastMove endSquare.
                 (self square columnDifference: enemySquare) abs = 1
@@ -117,7 +117,7 @@ MyPawn >> initialize [
 ]
 
 { #category : 'initialization' }
-MyPawn >> isInTheGoodLineForEnPassant [ 
+MyPawn >> isInEnPassantLine [ 
 	^ self isWhite 
 		ifTrue: [ square file = $5 ] 
 		ifFalse: [ square file = $4 ] 

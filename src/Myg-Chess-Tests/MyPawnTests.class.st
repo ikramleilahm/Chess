@@ -1,12 +1,12 @@
 Class {
-	#name : 'PawnMoveTests',
+	#name : 'MyPawnTests',
 	#superclass : 'TestCase',
 	#category : 'Myg-Chess-Tests',
 	#package : 'Myg-Chess-Tests'
 }
 
 { #category : 'tests' }
-PawnMoveTests >> testBlackPawnDiagonalCapture [
+MyPawnTests >> testBlackPawnCapture [
 	| game blackPawn targetSquare whitePawn startSquare |
 	game := MyChessGame freshGame.
 
@@ -32,7 +32,7 @@ PawnMoveTests >> testBlackPawnDiagonalCapture [
 ]
 
 { #category : 'tests' }
-PawnMoveTests >> testBlackPawnEnPassantCapture [
+MyPawnTests >> testBlackPawnEnPassantCapture [
     | game blackPawn whitePawn originalSquare enPassantSquare |
     game := MyChessGame freshGame.
 
@@ -63,7 +63,7 @@ PawnMoveTests >> testBlackPawnEnPassantCapture [
 ]
 
 { #category : 'tests' }
-PawnMoveTests >> testEnPassantCaptureDoesNotWorkWhenConditionsAreNotMet [
+MyPawnTests >> testEnPassantCaptureFail [
     | game whitePawn blackPawn originalSquare blackOriginalSquare targetSquare |
     game := MyChessGame freshGame.
     
@@ -95,7 +95,7 @@ PawnMoveTests >> testEnPassantCaptureDoesNotWorkWhenConditionsAreNotMet [
 ]
 
 { #category : 'tests' }
-PawnMoveTests >> testFirstMove [ 
+MyPawnTests >> testFirstAndSecondMove [ 
 	| game pawn startSquare targetSquare1 targetSquare2 |
 	game := MyChessGame freshGame.
 	pawn := game pieces detect: [ :p | p isPawn and: [ p square name = 'e2' ] ].
@@ -120,25 +120,7 @@ PawnMoveTests >> testFirstMove [
 ]
 
 { #category : 'tests' }
-PawnMoveTests >> testPawnCanMoveOneSquareAfterFirstMove [
-    | game pawn squares targetSquare |
-    game := MyChessGame freshGame.
-
-    "Placer un pion blanc à e3 (après un premier mouvement)"
-    pawn := game pieces detect: [ :p | p isPawn and: [ p square name = 'e2' ] ].
-    game move: pawn to: pawn square up. "Simuler le premier mouvement du pion à e3"
-
-    "Définir la case cible (e4)"
-    targetSquare := pawn square up.
-
-    "Vérifier que le pion peut avancer d'une seule case (e3 à e4)"
-    squares := pawn targetSquaresLegal: true.
-    self assert: (squares includes: targetSquare). "e4 doit être une case valide"
-
-]
-
-{ #category : 'tests' }
-PawnMoveTests >> testPawnCanMoveOneSquareAfterFirstMove_Black [
+MyPawnTests >> testPawnCanMoveOneSquareAfterFirstMove_B [
     | game pawn squares targetSquare |
     game := MyChessGame freshGame.
 
@@ -156,7 +138,25 @@ PawnMoveTests >> testPawnCanMoveOneSquareAfterFirstMove_Black [
 ]
 
 { #category : 'tests' }
-PawnMoveTests >> testPawnCannotJumpOverAnotherPawn_InFirstMove [
+MyPawnTests >> testPawnCanMoveOneSquareAfterFirstMove_W [
+    | game pawn squares targetSquare |
+    game := MyChessGame freshGame.
+
+    "Placer un pion blanc à e3 (après un premier mouvement)"
+    pawn := game pieces detect: [ :p | p isPawn and: [ p square name = 'e2' ] ].
+    game move: pawn to: pawn square up. "Simuler le premier mouvement du pion à e3"
+
+    "Définir la case cible (e4)"
+    targetSquare := pawn square up.
+
+    "Vérifier que le pion peut avancer d'une seule case (e3 à e4)"
+    squares := pawn targetSquaresLegal: true.
+    self assert: (squares includes: targetSquare). "e4 doit être une case valide"
+
+]
+
+{ #category : 'tests' }
+MyPawnTests >> testPawnCannotJumpOverAnotherPawn_InFM [
     | game pawn obstacle startSquare targetSquare |
 	game := MyChessGame freshGame.
 
@@ -187,7 +187,7 @@ PawnMoveTests >> testPawnCannotJumpOverAnotherPawn_InFirstMove [
 ]
 
 { #category : 'tests' }
-PawnMoveTests >> testPawnCannotMoveTwoSquaresAfterFirstMove [
+MyPawnTests >> testPawnCannotMoveTwoSquaresAfterFM [
     | game pawn initialPosition firstMoveSquare secondMoveSquare invalidDoubleStep |
 
     "1. Créer un jeu vierge et initialiser les pièces"
@@ -224,7 +224,7 @@ PawnMoveTests >> testPawnCannotMoveTwoSquaresAfterFirstMove [
 ]
 
 { #category : 'tests' }
-PawnMoveTests >> testPawnCannotMoveTwoSquaresAfterFirstMove_Black [
+MyPawnTests >> testPawnCannotMoveTwoSquaresAfterFM_B [
     | game pawn squares targetSquare |
     game := MyChessGame freshGame.
     
@@ -247,7 +247,7 @@ PawnMoveTests >> testPawnCannotMoveTwoSquaresAfterFirstMove_Black [
 ]
 
 { #category : 'tests' }
-PawnMoveTests >> testPawnFirstMoveTwoSquares_Black [
+MyPawnTests >> testPawnFirstMoveTwoSquares_B [
     | game pawn startSquare doubleStepSquare |
     
     "1. Créer un jeu vierge et initialiser les pièces"
@@ -270,7 +270,7 @@ PawnMoveTests >> testPawnFirstMoveTwoSquares_Black [
 ]
 
 { #category : 'tests' }
-PawnMoveTests >> testPawnFirstMoveTwoSquares_White [
+MyPawnTests >> testPawnFirstMoveTwoSquares_W [
     | game pawn startSquare doubleStepSquare |
     
     "1. Créer un jeu vierge et initialiser les pièces"
@@ -293,7 +293,7 @@ PawnMoveTests >> testPawnFirstMoveTwoSquares_White [
 ]
 
 { #category : 'tests' }
-PawnMoveTests >> testRenderPieceOn [ 
+MyPawnTests >> testRenderPieceOn [ 
 	| game pawn targetSquare |
 	game := MyChessGame freshGame.
 	pawn := game pieces detect: [ :p | p isPawn and: [ p square name = 'e2' ] ].
@@ -305,7 +305,7 @@ PawnMoveTests >> testRenderPieceOn [
 ]
 
 { #category : 'tests' }
-PawnMoveTests >> testWhitePawnDiagonalCapture [
+MyPawnTests >> testWhitePawnCapture [
 	| game whitePawn targetSquare blackPawn startSquare |
 	game := MyChessGame freshGame.
 
@@ -331,7 +331,7 @@ PawnMoveTests >> testWhitePawnDiagonalCapture [
 ]
 
 { #category : 'tests' }
-PawnMoveTests >> testWhitePawnEnPassantCapture [
+MyPawnTests >> testWhitePawnEnPassantCapture [
     | game whitePawn blackPawn originalSquare enPassantSquare |
     game := MyChessGame freshGame.
 
