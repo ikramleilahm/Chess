@@ -116,6 +116,31 @@ MyPawnTest >> testEnPassantRequiresTwoSquareAdvance [
 ]
 
 { #category : 'tests' }
+MyPawnTest >> testFirstMove [ 
+	| game pawn startSquare targetSquare1 targetSquare2 |
+	game := MyChessGame freshGame.
+	pawn := game pieces detect: [ :p | p isPawn and: [ p square name = 'e2' ] ].
+
+	"Mouvement initial d'une case"
+	startSquare := pawn square.
+	targetSquare1 := startSquare up.
+	game move: pawn to: targetSquare1.
+	self assert: pawn square equals: targetSquare1.
+	self deny: startSquare hasPiece.
+
+	"Réinitialiser pour tester mouvement initial de deux cases"
+	game := MyChessGame freshGame.
+	pawn := game pieces detect: [ :p | p isPawn and: [ p square name = 'e2' ] ].
+
+	"Mouvement initial de deux cases"
+	startSquare := pawn square.
+	targetSquare2 := startSquare up up.
+	game move: pawn to: targetSquare2.
+	self assert: pawn square equals: targetSquare2.
+	self deny: startSquare hasPiece.
+]
+
+{ #category : 'tests' }
 MyPawnTest >> testId [
 
 	self assert: MyPawn new id equals: 'P'
@@ -124,13 +149,31 @@ MyPawnTest >> testId [
 { #category : 'tests' }
 MyPawnTest >> testLengthOneFirstMovesIsPossible [
 
-	| pawn board squares |
-	board := MyChessBoard empty.
-	board at: 'e2' put: (pawn := MyPawn white).
+	| game pawn startSquare targetSquare1 |
+	
+	"Initialisation du jeu"
+	game := MyChessGame freshGame.
+	
+	"Vérification des pièces du jeu (pour voir si le pion est bien placé)"
+	(game pieces isEmpty) ifTrue: [ self fail: 'Aucune pièce initiale dans le jeu' ].
+	
+	"Détecter le pion en 'e2'"
+	pawn := game pieces detect: [ :p | p isPawn and: [ p square name = 'e2' ] ].
+	
+	"Si le pion n'a pas été trouvé, échouer"
+	pawn ifNil: [ self fail: 'Pion blanc en e2 non trouvé' ].
 
-	"Vérifier que le pion peut se déplacer de deux cases pour la premiere fois"
-	squares := pawn targetSquaresLegal: true.
-	self assert: (squares includes: (board at: 'e3'))
+	"Mouvement initial d'une case en avant"
+	startSquare := pawn square.
+	targetSquare1 := startSquare up.  "Déplace le pion d'une case vers le haut (en avant)"
+	
+	"Exécuter le mouvement"
+	game move: pawn to: targetSquare1.
+	
+	"Vérifier que le pion a été déplacé correctement"
+	self assert: pawn square equals: targetSquare1.  "Vérifie que le pion est bien déplacé"
+	self deny: startSquare hasPiece.  "Vérifie que l'ancienne case est vide"
+
 ]
 
 { #category : 'tests' }

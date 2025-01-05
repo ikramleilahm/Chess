@@ -117,7 +117,7 @@ MyPawn >> isInEnPassantLine [
 ]
 
 { #category : 'testing' }
-MyPawn >> isPawn [ 
+MyPawn >> isPawn [
 ^ true
 ]
 
