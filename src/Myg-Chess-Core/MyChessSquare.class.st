@@ -17,7 +17,7 @@ Class {
 { #category : 'api - text weight' }
 MyChessSquare class >> black [
 
-	^ MyBlackChessSquare new.
+	^ self color: Color black
 ]
 
 { #category : 'api - text weight' }
@@ -32,7 +32,7 @@ MyChessSquare class >> color: aColor [
 { #category : 'api - text weight' }
 MyChessSquare class >> white [
 
-	^ MyWhiteChessSquare new.
+	^ self color: Color white
 ]
 
 { #category : 'arithmetic' }
@@ -78,6 +78,12 @@ MyChessSquare >> color: anObject [
 MyChessSquare >> column [
 	
 	^ name first
+]
+
+{ #category : 'as yet unclassified' }
+MyChessSquare >> columnDifference: anotherSquare [
+    "Retourne la différence en termes de colonnes entre cette case et anotherSquare."
+    ^ (self column asInteger - anotherSquare column asInteger) abs
 ]
 
 { #category : 'accessing' }

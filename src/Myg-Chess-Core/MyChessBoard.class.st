@@ -143,13 +143,15 @@ MyChessBoard >> initializePieces [
 			square := black
 				          ifTrue: [
 					          black := false.
-					          MyBlackChessSquare new
+					          MyChessSquare basicNew
+						          color: Color black;
 						          board: self;
 						          initialize;
 						          yourself ]
 				          ifFalse: [
 					          black := true.
-					          MyWhiteChessSquare new
+					          MyChessSquare basicNew
+						          color: Color white;
 						          board: self;
 						          initialize;
 						          yourself ].
@@ -158,54 +160,26 @@ MyChessBoard >> initializePieces [
 			self addChild: square ].
 		black := black not ].
 
-	self at: 'a1' put: MyWhiteRook new.
+	self at: 'a1' put: MyRook white.
 	self at: 'b1' put: MyKnight white.
 	self at: 'c1' put: MyBishop white.
 	self at: 'd1' put: MyQueen white.
 	self at: 'e1' put: MyKing white.
 	self at: 'f1' put: MyBishop white.
 	self at: 'g1' put: MyKnight white.
-	self at: 'h1' put: MyWhiteRook new.
+	self at: 'h1' put: MyRook white.
 
 	$a asciiValue to: $h asciiValue do: [ :column |
 		self at: column asCharacter asString , '2' put: MyPawn white ].
 
-	self at: 'a8' put: MyBlackRook new.
+	self at: 'a8' put: MyRook black.
 	self at: 'b8' put: MyKnight black.
 	self at: 'c8' put: MyBishop black.
 	self at: 'd8' put: MyQueen black.
 	self at: 'e8' put: MyKing black.
 	self at: 'f8' put: MyBishop black.
 	self at: 'g8' put: MyKnight black.
-	self at: 'h8' put: MyBlackRook.
-
-	$a asciiValue to: $h asciiValue do: [ :column |
-		self at: column asCharacter asString , '7' put: MyPawn black ]
-]
-
-{ #category : 'initialization' }
-MyChessBoard >> initializePiecess [
-
-	self at: 'a1' put: MyWhiteRook.
-	self at: 'b1' put: MyKnight white.
-	self at: 'c1' put: MyBishop white.
-	self at: 'd1' put: MyQueen white.
-	self at: 'e1' put: MyKing white.
-	self at: 'f1' put: MyBishop white.
-	self at: 'g1' put: MyKnight white.
-	self at: 'h1' put: MyWhiteRook.
-
-	$a asciiValue to: $h asciiValue do: [ :column |
-		self at: column asCharacter asString , '2' put: MyPawn white ].
-
-	self at: 'a8' put: MyBlackRook.
-	self at: 'b8' put: MyKnight black.
-	self at: 'c8' put: MyBishop black.
-	self at: 'd8' put: MyQueen black.
-	self at: 'e8' put: MyKing black.
-	self at: 'f8' put: MyBishop black.
-	self at: 'g8' put: MyKnight black.
-	self at: 'h8' put: MyBlackRook.
+	self at: 'h8' put: MyRook black.
 
 	$a asciiValue to: $h asciiValue do: [ :column |
 		self at: column asCharacter asString , '7' put: MyPawn black ]
@@ -223,14 +197,16 @@ MyChessBoard >> initializeSquares [
 			square := black
 				          ifTrue: [
 					          black := false.
-					          MyBlackChessSquare new
+					          MyChessSquare basicNew
+						          color: Color black;
 						          board: self;
 						          initialize;
 						          contents: nil;
 						          yourself ]
 				          ifFalse: [
 					          black := true.
-					          MyWhiteChessSquare new
+					          MyChessSquare basicNew
+						          color: Color white;
 						          board: self;
 						          initialize;
 						          contents: nil;

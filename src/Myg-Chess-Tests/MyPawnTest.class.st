@@ -6,6 +6,20 @@ Class {
 }
 
 { #category : 'tests' }
+MyPawnTest >> testBlackEnPassantCapturePossible [
+    | whitePawn blackPawn board squares |
+    board := MyChessBoard empty.
+    "Place a black pawn on e4"
+    board at: 'e4' put: (blackPawn := MyPawn black).
+    "Place a white pawn on d4 that just moved two squares"
+    board at: 'd4' put: (whitePawn := MyPawn white).
+    board lastMovedPawn: whitePawn.
+    "Verify that black pawn can capture en passant to d3"
+    squares := blackPawn targetSquaresLegal: true.
+    self assert: (squares includes: (board at: 'd3'))
+]
+
+{ #category : 'tests' }
 MyPawnTest >> testBlackPawnCaptureMovesPossible [
     | blackPawn whitePawn board squares |
     board := MyChessBoard empty.
@@ -44,6 +58,61 @@ MyPawnTest >> testCannotMoveOffBoardB [
     squares := pawn targetSquaresLegal: true.
     self deny: (squares includes: (board at: 'e9')).  "Cannot move off the board"
 
+]
+
+{ #category : 'tests' }
+MyPawnTest >> testEnPassantOnlyForAdjacentPawns [
+    | whitePawn blackPawn board squares |
+    board := MyChessBoard empty.
+    "Setup pawns that aren't adjacent"
+    board at: 'e5' put: (whitePawn := MyPawn white).
+    board at: 'h5' put: (blackPawn := MyPawn black).
+    board lastMovedPawn: blackPawn.
+    "Verify that en passant is not possible"
+    squares := whitePawn targetSquaresLegal: true.
+    self deny: (squares includes: (board at: 'h6'))
+]
+
+{ #category : 'tests' }
+MyPawnTest >> testEnPassantOnlyOnCorrectRank [
+    | whitePawn blackPawn board squares |
+    board := MyChessBoard empty.
+    "Setup pawns on wrong rank for en passant"
+    board at: 'e3' put: (whitePawn := MyPawn white).
+    board at: 'f3' put: (blackPawn := MyPawn black).
+    board lastMovedPawn: blackPawn.
+    "Verify that en passant is not possible"
+    squares := whitePawn targetSquaresLegal: true.
+    self deny: (squares includes: (board at: 'f4'))
+]
+
+{ #category : 'tests' }
+MyPawnTest >> testEnPassantOnlyPossibleImmediately [
+    | whitePawn blackPawn board squares |
+    board := MyChessBoard empty.
+    "Setup initial position"
+    board at: 'e5' put: (whitePawn := MyPawn white).
+    board at: 'f5' put: (blackPawn := MyPawn black).
+    board lastMovedPawn: blackPawn.
+    "Clear lastMovedPawn to simulate a different move being made"
+    board lastMovedPawn: nil.
+    "Verify that en passant is no longer possible"
+    squares := whitePawn targetSquaresLegal: true.
+    self deny: (squares includes: (board at: 'f6'))
+]
+
+{ #category : 'tests' }
+MyPawnTest >> testEnPassantRequiresTwoSquareAdvance [
+    | whitePawn blackPawn board squares |
+    board := MyChessBoard empty.
+    "Setup pawns where black didn't move two squares"
+    board at: 'e5' put: (whitePawn := MyPawn white).
+    board at: 'f5' put: (blackPawn := MyPawn black).
+    blackPawn hasMoved: true.
+    board lastMovedPawn: blackPawn.
+    "Verify that en passant is not possible"
+    squares := whitePawn targetSquaresLegal: true.
+    self deny: (squares includes: (board at: 'f6'))
 ]
 
 { #category : 'tests' }
@@ -126,6 +195,43 @@ MyPawnTest >> testSubsequentMovesOneSquareOnlyB [
 	squares := pawn targetSquaresLegal: true.
 	self assert: (squares includes: (board at: 'e4')).
 	self deny: (squares includes: (board at: 'e3')) "Should not be able to move two squares anymore"
+]
+
+{ #category : 'tests' }
+MyPawnTest >> testWhiteEnPassantCaptureExecution [
+    | whitePawn blackPawn board |
+    board := MyChessBoard empty.
+    "Setup initial position"
+    board at: 'e5' put: (whitePawn := MyPawn white).
+    board at: 'f5' put: (blackPawn := MyPawn black).
+    board lastMovedPawn: blackPawn.
+    "Execute en passant capture"
+    whitePawn moveTo: (board at: 'f6').
+    "Verify captured pawn is removed and capturing pawn moved"
+    self assert: (board at: 'f5') contents isNil.
+    self assert: (board at: 'f6') contents equals: whitePawn
+]
+
+{ #category : 'tests' }
+MyPawnTest >> testWhiteEnPassantCapturePossible [
+    | whitePawn blackPawn board squares |
+    board := MyChessBoard empty.
+    
+    "Place a white pawn on e5 (crucial - must be on 5th rank)"
+    board at: 'e5' put: (whitePawn := MyPawn white).
+    
+    "Place a black pawn on f7 and move it two squares to f5"
+    board at: 'f7' put: (blackPawn := MyPawn black).
+    blackPawn moveTo: (board at: 'f5').
+    
+    "Now white should be able to capture en passant to f6"
+    squares := whitePawn targetSquaresLegal: true.
+    
+    "Debug output"
+    Transcript show: 'Available moves: '; show: squares asString; cr.
+    Transcript show: 'Last moved pawn: '; show: board lastMovedPawn asString; cr.
+    
+    self assert: (squares includes: (board at: 'f6'))
 ]
 
 { #category : 'tests' }

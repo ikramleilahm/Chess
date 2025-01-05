@@ -23,7 +23,8 @@ Class {
 		'movesLabel',
 		'moveCountLabel',
 		'moves',
-		'dsp'
+		'dsp',
+		'lastMove'
 	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
@@ -64,14 +65,13 @@ MyChessGame >> initialize [
 
 	moves := OrderedCollection new.
 	whitePlayer := MyPlayer new white game: self.
-	blackPlayer := MyPlayer new black game: self.
-	
+	blackPlayer := MyPlayer new black game: self
 ]
 
 { #category : 'initialization' }
 MyChessGame >> initializeFonts [
-	"We use fonts to render the characters, and they should be loaded (and downloaded if not there yet)"
 
+	"We use fonts to render the characters, and they should be loaded (and downloaded if not there yet)"
 	| library |
 	library := AeFTLibrary newInitialized.
 	MyOpenChessDownloadedFont new
@@ -124,9 +124,23 @@ MyChessGame >> initializeFromFENGame: aFENGame [
 		aLayoutConstraints vertical fitContent ]
 ]
 
+{ #category : 'accessing' }
+MyChessGame >> lastMove [
+
+	^ lastMove
+]
+
+{ #category : 'accessing' }
+MyChessGame >> lastMove: aMove [
+
+	lastMove := aMove
+]
+
 { #category : 'public' }
 MyChessGame >> move: piece to: square [
-
+	"Enregistre le dernier mouvement utile pour 'en passant'"
+	self recordLastMove: piece to: square. 
+	
 	piece moveTo: square.
 	self recordMovementOf: piece to: square
 ]
@@ -149,11 +163,22 @@ MyChessGame >> play [
 	self checkForMate
 ]
 
+{ #category : 'as yet unclassified' }
+MyChessGame >> recordLastMove: aPiece to: aSquare [
+	| move |
+	move := MyMove new.
+	move piece: aPiece.
+	move startSquare: aPiece square.
+	move endSquare: aSquare.
+	self lastMove: move
+]
+
 { #category : 'moves' }
 MyChessGame >> recordMovementOf: aPiece to: aSquare [
 	"moves add: (MyMove piece: aPiece square: aSquare name)."
 
 	| prefix movesText |
+	
 	prefix := currentPlayer isWhite
 		          ifTrue: [ moveCount asString , '.' ]
 		          ifFalse: [ '' ].
@@ -173,5 +198,6 @@ MyChessGame >> recordMovementOf: aPiece to: aSquare [
 		stream nextPutAll: currentLine
 	].
 	
-	movesLabel text: movesText
+	movesLabel text: movesText.
+	
 ]

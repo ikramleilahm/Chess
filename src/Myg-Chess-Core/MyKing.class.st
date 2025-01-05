@@ -72,7 +72,7 @@ MyKing >> opponentPieces [
 { #category : 'rendering' }
 MyKing >> renderPieceOn: aSquare [
 
-	^ self subclassResponsibility
+	^ aSquare renderKing: self
 ]
 
 { #category : 'rendering' }
