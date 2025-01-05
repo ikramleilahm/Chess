@@ -26,7 +26,7 @@ Pour commencer, clonez le dépôt et ouvrez le projet dans votre environnement S
 
 ### Installation
 ```bash
-git clone <url-du-depot>
+git clone <(https://github.com/ikramleilahm/Chess.git)>
 ```
 
 ### Exécution des Tests
@@ -35,13 +35,6 @@ Des tests sont inclus pour vérifier la fonctionnalité des mouvements du pion e
 - Premier mouvement avec avance de deux cases
 - Captures en diagonale
 - En Passant
-
-## Tester le Code
-Le projet inclut des tests unitaires pour vérifier différents scénarios de mouvement du pion. Pour exécuter les tests, utilisez la commande suivante :
-
-```smalltalk
-TestRunner new runAll.
-```
 
 ## Défis & Débogage
 Les principaux défis rencontrés lors du développement de ce projet étaient les suivants :
