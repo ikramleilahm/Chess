@@ -213,6 +213,17 @@ MyPawnTest >> testLengthTwoFirstMovesIsPossibleB [
 ]
 
 { #category : 'tests' }
+MyPawnTest >> testRenderPieceOn [
+
+	| game pawn targetSquare |
+	game := MyChessGame freshGame.
+	pawn := game pieces detect: [ :p |
+		        p isPawn and: [ p square name = 'e2' ] ].
+	targetSquare := pawn square.
+	pawn renderPieceOn: targetSquare
+]
+
+{ #category : 'tests' }
 MyPawnTest >> testSubsequentMovesOneSquareOnly [
     | pawn board squares |
     board := MyChessBoard empty.
